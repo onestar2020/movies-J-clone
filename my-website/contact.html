@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ================= META & STYLES ================= -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Admin & Request - Movies-J</title>
+    <link rel="icon" href="images/logo-192.png" type="image/png">
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        body { background: #111; color: #fff; font-family: 'Poppins', sans-serif; }
+        .contact-box { max-width: 600px; margin: 40px auto; background: #181818; border: 1px solid #333; border-radius: 12px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; font-size: 13px; color: #aaa; margin-bottom: 6px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; background: #222; border: 1px solid #444; border-radius: 6px; color: #fff; font-size: 14px; font-family: inherit; outline: none; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #e50914; }
+        .submit-btn { width: 100%; padding: 12px; background: #e50914; border: none; border-radius: 6px; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .submit-btn:hover { background: #b80710; }
+    </style>
+</head>
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="header" style="padding: 12px 20px; border-bottom: 1px solid #222; display: flex; align-items: center; justify-content: space-between; background: #141414;">
+        <a href="index.html" class="home-btn" style="color:#ccc; text-decoration:none; font-size:1.1rem;"><i class="fas fa-arrow-left"></i> Home</a>
+        <h2 style="font-size: 1.1rem; font-weight: 600;">Message Admin</h2>
+        <div style="width: 40px;"></div>
+    </header>
+
+    <!-- ================= CONTACT FORM ================= -->
+    <div class="contact-box">
+        <h3 style="font-size: 1.4rem; margin-bottom: 8px; display: flex; align-items: center; gap: 10px;">
+            <i class="fas fa-paper-plane" style="color: #e50914;"></i> Get in Touch
+        </h3>
+        <p style="color: #888; font-size: 13px; margin-bottom: 25px;">Request a movie/show, report a broken stream, or send feedback to the Admin.</p>
+
+        <form id="contact-admin-form">
+            <div class="form-group">
+                <label>Your Name / Username</label>
+                <input type="text" id="contact-name" placeholder="Enter your name" required>
+            </div>
+
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="contact-email" placeholder="Enter your email" required>
+            </div>
+
+            <div class="form-group">
+                <label>Category</label>
+                <select id="contact-category">
+                    <option value="Movie / Show Request">🎬 Movie / TV Show Request</option>
+                    <option value="Broken Server / Stream Issue">⚠️ Broken Server / Video Problem</option>
+                    <option value="Account / Login Concern">🔑 Account / Login Concern</option>
+                    <option value="General Feedback">💬 General Feedback / Suggestion</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Your Message</label>
+                <textarea id="contact-message" rows="5" placeholder="Type your message or title details here..." required></textarea>
+            </div>
+
+            <button type="submit" id="send-btn" class="submit-btn">Send Message to Admin</button>
+        </form>
+    </div>
+
+    <!-- ================= FIRESTORE MESSAGE SUBMIT LOGIC ================= -->
+    <script type="module">
+        import { auth, db } from "./js/firebase-config.js";
+        import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Auto-fill form kung may naka-login na user
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                if (user.displayName) document.getElementById("contact-name").value = user.displayName;
+                if (user.email) document.getElementById("contact-email").value = user.email;
+            }
+        });
+
+        document.getElementById("contact-admin-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const sendBtn = document.getElementById("send-btn");
+            const name = document.getElementById("contact-name").value.trim();
+            const email = document.getElementById("contact-email").value.trim();
+            const category = document.getElementById("contact-category").value;
+            const message = document.getElementById("contact-message").value.trim();
+
+            if (!name || !email || !message) return;
+
+            sendBtn.disabled = true;
+            sendBtn.textContent = "Sending...";
+
+            try {
+                await addDoc(collection(db, "admin_messages"), {
+                    senderName: name,
+                    senderEmail: email,
+                    category: category,
+                    message: message,
+                    userId: auth.currentUser ? auth.currentUser.uid : "guest",
+                    createdAt: serverTimestamp()
+                });
+
+                alert("Your message has been sent successfully to the Admin!");
+                document.getElementById("contact-message").value = "";
+            } catch (err) {
+                console.error("Error sending message:", err);
+                alert("Failed to send message. Please try again.");
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.textContent = "Send Message to Admin";
+            }
+        });
+    </script>
+</body>
+</html>

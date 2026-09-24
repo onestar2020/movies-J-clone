@@ -1,0 +1,186 @@
+/* ================= MOVIES-J CHANGELOG (MOBILE & DESKTOP OPTIMIZED) ================= */
+.changelog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.82);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+.changelog-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.changelog-card {
+    background: #141414;
+    border: 1px solid #2a2a2a;
+    border-top: 3px solid #e50914;
+    border-radius: 14px;
+    padding: 20px;
+    width: 100%;
+    max-width: 480px;
+    max-height: 82vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.9), 0 0 20px rgba(229, 9, 20, 0.2);
+    transform: scale(0.92);
+    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-sizing: border-box;
+}
+
+.changelog-overlay.show .changelog-card {
+    transform: scale(1);
+}
+
+.changelog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #242424;
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+}
+
+.changelog-header h3 {
+    color: #ffffff;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.changelog-close {
+    background: #222;
+    border: 1px solid #333;
+    color: #aaa;
+    font-size: 1.2rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.changelog-close:hover,
+.changelog-close:active {
+    background: #e50914;
+    color: #fff;
+    border-color: #e50914;
+}
+
+.changelog-body {
+    overflow-y: auto;
+    padding-right: 4px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.changelog-body::-webkit-scrollbar {
+    width: 4px;
+}
+.changelog-body::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 4px;
+}
+
+.changelog-item {
+    margin-bottom: 18px;
+    position: relative;
+    padding-left: 14px;
+    border-left: 2px solid #e50914;
+}
+
+.changelog-item:last-child {
+    margin-bottom: 6px;
+}
+
+.changelog-date {
+    font-size: 0.78rem;
+    color: #888;
+    font-weight: 600;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.changelog-version {
+    background: #e50914;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+}
+
+.changelog-item h4 {
+    color: #f1f1f1;
+    font-size: 0.95rem;
+    margin: 4px 0 6px 0;
+    font-weight: 600;
+}
+
+.changelog-item ul {
+    margin: 0;
+    padding-left: 16px;
+    color: #b3b3b3;
+    font-size: 0.85rem;
+    line-height: 1.45;
+}
+
+.changelog-item li {
+    margin-bottom: 4px;
+}
+
+/* Mobile Navbar Button Style */
+.changelog-nav-btn {
+    background: transparent;
+    border: none;
+    color: #ccc;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease, transform 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.changelog-nav-btn:hover,
+.changelog-nav-btn:active {
+    color: #e50914;
+    transform: scale(1.1);
+}
+
+@media (max-width: 600px) {
+    .changelog-card {
+        padding: 16px;
+        max-height: 85vh;
+        border-radius: 12px;
+    }
+    .changelog-header h3 {
+        font-size: 1.05rem;
+    }
+    .changelog-item ul {
+        font-size: 0.82rem;
+    }
+}

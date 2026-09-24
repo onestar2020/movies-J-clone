@@ -1,0 +1,66 @@
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🔒 Access Denied</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #f44336;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 100px 20px;
+    }
+    h1 {
+      font-size: 3em;
+    }
+    p {
+      font-size: 1.2em;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔒 Access Denied</h1>
+  <p>You have been locked out for security reasons.</p>
+
+  <script>
+    // 🔐 Disable Right Click
+    document.addEventListener("contextmenu", e => e.preventDefault());
+
+    // 🔐 Block DevTools Shortcuts
+    document.addEventListener("keydown", function (e) {
+      if (
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && ["I", "J", "C"].includes(e.key.toUpperCase())) ||
+        (e.ctrlKey && e.key.toUpperCase() === "U")
+      ) {
+        e.preventDefault();
+        location.replace("about:blank");
+      }
+    });
+
+    // 🔐 Detect DevTools Open (Console Trap)
+    (function () {
+      const element = new Image();
+      Object.defineProperty(element, "id", {
+        get: function () {
+          document.body.innerHTML = "";
+          location.replace("about:blank");
+        }
+      });
+      console.log(element);
+    })();
+
+    // 🔐 Detect resize caused by DevTools
+    setInterval(() => {
+      if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200) {
+        document.body.innerHTML = '';
+        location.replace("about:blank");
+      }
+    }, 1000);
+  </script>
+</body>
+</html>
+-->

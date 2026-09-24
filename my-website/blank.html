@@ -1,0 +1,30 @@
+ <!--  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Redirected</title>
+  <style>
+    body {
+      background: #000;
+      color: #fff;
+      font-family: sans-serif;
+      text-align: center;
+      padding-top: 100px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔒 Access Denied</h1>
+  <p>You have been locked out for security reasons.</p>
+
+  <script>
+    // Prevent back button
+    history.pushState(null, "", location.href);
+    window.onpopstate = () => {
+      history.go(1);
+    };
+  </script>
+</body>
+</html>
+-->
