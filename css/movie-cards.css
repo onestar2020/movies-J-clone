@@ -1,0 +1,84 @@
+/* ===== MOVIE CARDS ===== */
+.movie-card {
+  position: relative;
+  width: 170px;
+  flex-shrink: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  background: var(--card-bg);
+}
+
+.movie-card img {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.movie-card:hover {
+  transform: scale(1.06);
+  z-index: 10;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+}
+
+.movie-card:hover img {
+  transform: scale(1.05);
+}
+
+/* Ranking Badge */
+.rank-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(0,0,0,0.75);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+/* Card Info (always visible on mobile, hover on desktop) */
+.movie-card-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 10px 10px;
+  background: linear-gradient(to top, rgba(0,0,0,0.92), transparent);
+}
+
+.movie-card-info h3 {
+  font-size: 0.88rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 4px;
+}
+
+.card-meta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: flex;
+  gap: 8px;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .movie-card {
+    width: 130px;
+  }
+
+  .movie-card-info h3 {
+    font-size: 0.8rem;
+  }
+}

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movies-J Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body { background-color: #0a0a0a; color: white; font-family: 'Inter', sans-serif; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; }
+        .admin-container { width: 100%; max-width: 700px; }
+        .admin-card { background: #141414; padding: 30px; border-radius: 15px; border: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 30px; }
+        .admin-card h2 { color: #ff9800; text-align: center; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 15px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #aaa; font-size: 0.9rem; }
+        .form-group input[type="text"], .form-group select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #333; background: #1a1a1a; color: white; font-size: 1rem; box-sizing: border-box; outline: none; }
+        .form-group input[type="text"]:focus, .form-group select:focus { border-color: #ff9800; }
+        .checkbox-group { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+        
+        .fetch-group { display: flex; gap: 10px; }
+        .fetch-btn { background: #444; color: white; border: none; padding: 0 20px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; white-space: nowrap; }
+        .fetch-btn:hover { background: #666; }
+
+        .submit-btn { width: 100%; background: #ff9800; color: black; border: none; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .submit-btn:hover { background: #e68a00; }
+        #cancelEditBtn { background: #ff4444; margin-top: 10px; display: none; }
+        #cancelEditBtn:hover { background: #cc0000; }
+        #statusMessage { text-align: center; margin-top: 15px; font-weight: bold; display: none; }
+
+        /* Inventory List Styles */
+        .inventory-item { background: #1a1a1a; border: 1px solid #333; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .inv-info h4 { margin: 0 0 5px 0; color: #fff; }
+        .inv-info p { margin: 0; font-size: 0.8rem; color: #888; }
+        .inv-actions button { padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-left: 5px; }
+        .btn-edit { background: #4caf50; color: white; }
+        .btn-delete { background: #ff4444; color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="admin-container">
+        <div class="admin-card">
+            <h2 id="formHeader">🎬 Upload to Vault</h2>
+            <form id="uploadForm">
+                <input type="hidden" id="editDocId"> 
+                <div class="form-group">
+                    <label>Movie Title (Type here first)</label>
+                    <input type="text" id="movieTitle" placeholder="e.g. Deadpool & Wolverine" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Category / Genre</label>
+                    <select id="movieGenre">
+                        <option value="action">Action & Adventure</option>
+                        <option value="comedy">Comedy</option>
+                        <option value="horror">Horror & Thriller</option>
+                        <option value="romance">Romance & Drama</option>
+                        <option value="scifi">Sci-Fi & Fantasy</option>
+                        <option value="animation">Animation & Anime</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Auto-Fetch Poster (TMDB)</label>
+                    <div class="fetch-group">
+                        <input type="text" id="posterUrl" placeholder="Image URL will appear here...">
+                        <button type="button" class="fetch-btn" id="fetchPosterBtn"><i class="fas fa-search"></i> Get Poster</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Release Info / File Name (Optional)</label>
+                    <input type="text" id="fileInfo" placeholder="e.g. Mercy.2026.1080p.AMZN.WEB-DL.DDP5.1.H265.mkv">
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="isNewMovie" checked>
+                    <label for="isNewMovie" style="margin: 0; color: #4caf50; font-weight: bold;">Label as "NEW"</label>
+                </div>
+
+                <div style="border-top: 1px solid #333; margin: 20px 0;"></div>
+
+                <div class="form-group"><label>Google Drive Link</label><input type="text" id="driveLink" placeholder="Paste link here..."></div>
+                <div class="form-group"><label>MediaFire Link</label><input type="text" id="mediafireLink" placeholder="Paste link here..."></div>
+                <div class="form-group"><label>Mega Link</label><input type="text" id="megaLink" placeholder="Paste link here..."></div>
+                <div class="form-group"><label>TeraBox Link</label><input type="text" id="teraboxLink" placeholder="Paste link here..."></div>
+                
+                <div class="form-group" style="border-top: 1px solid #333; padding-top: 15px; margin-top: 10px;">
+                    <label style="color: #ff9800;">Other Link</label>
+                    <input type="text" id="otherPlatformName" placeholder="Platform Name (e.g. Dropbox)" style="margin-bottom: 5px;">
+                    <input type="text" id="otherLink" placeholder="Paste link here...">
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">Upload Movie</button>
+                <button type="button" class="submit-btn" id="cancelEditBtn">Cancel Edit</button>
+                <p id="statusMessage"></p>
+            </form>
+        </div>
+
+        <div class="admin-card">
+            <h2>📦 Vault Inventory</h2>
+            <div id="inventoryList">
+                <p style="text-align: center; color: #888;">Loading movies...</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/admin.js"></script>
+</body>
+</html>

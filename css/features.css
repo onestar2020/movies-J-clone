@@ -1,0 +1,162 @@
+/* ====================================================
+   MOVIES-J: FILTER CHIPS, WATCHLIST & MOBILE FIXES
+   ==================================================== */
+
+/* --- Quick Filter Chips --- */
+.filter-chips-wrapper {
+    margin: 15px 0 20px;
+    position: relative;
+    z-index: 6;
+}
+
+.filter-chips-container {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 6px 2px 10px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.filter-chips-container::-webkit-scrollbar {
+    display: none;
+}
+
+.filter-chip {
+    background: #202020;
+    color: #bbb;
+    border: 1px solid #333;
+    padding: 7px 15px;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.filter-chip:hover {
+    background: #2a2a2a;
+    color: #fff;
+    border-color: #555;
+}
+
+.filter-chip.active {
+    background: var(--primary-color, #e50914);
+    color: #fff;
+    border-color: var(--primary-color, #e50914);
+    box-shadow: 0 4px 12px rgba(229, 9, 20, 0.35);
+}
+
+/* --- Card Base Wrapper --- */
+.movie-card {
+    position: relative !important;
+}
+
+/* --- Always-Visible Mobile/Touch Bookmark Button --- */
+.mobile-bookmark-badge {
+    display: none;
+    position: absolute !important;
+    top: 6px !important;
+    right: 6px !important;
+    z-index: 25 !important;
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 50% !important;
+    background: rgba(0, 0, 0, 0.8) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: #fff !important;
+    font-size: 0.75rem !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    backdrop-filter: blur(4px) !important;
+    transition: transform 0.15s ease, background 0.2s ease !important;
+}
+
+.mobile-bookmark-badge.bookmarked {
+    background: #e50914 !important;
+    border-color: #e50914 !important;
+    color: #fff !important;
+}
+
+.mobile-bookmark-badge:active {
+    transform: scale(0.85);
+}
+
+/* --- Desktop Card Watchlist Button --- */
+.card-buttons button.watchlist-btn {
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.card-buttons button.watchlist-btn.bookmarked {
+    background: #e50914 !important;
+    border-color: #e50914 !important;
+    color: #fff !important;
+}
+
+/* --- Nav Action Watchlist Icon Button --- */
+.watchlist-nav-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.05rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    position: relative;
+    transition: color 0.2s ease;
+}
+
+.watchlist-nav-btn:hover {
+    color: #e50914;
+}
+
+/* --- Watchlist Modal Grid Layout --- */
+#watchlist-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 12px;
+    padding: 15px 5px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+/* --- Mobile-Specific Layout Adjustments --- */
+@media (max-width: 900px) {
+    .mobile-bookmark-badge {
+        display: flex !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .filter-chip {
+        font-size: 0.75rem;
+        padding: 6px 12px;
+    }
+
+    .nav-actions {
+        gap: 8px !important;
+    }
+
+    #online-counter-badge {
+        padding: 4px 8px !important;
+        font-size: 0.7rem !important;
+    }
+
+    .watchlist-nav-btn,
+    .changelog-nav-btn,
+    .watch-history-btn,
+    .nav-actions .fa-search {
+        font-size: 0.95rem !important;
+    }
+
+    #watchlist-list {
+        grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
+        gap: 8px;
+    }
+}

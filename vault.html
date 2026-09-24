@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J-Vault - Premium Downloads</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #ff9800;
+            --bg: #0a0a0a;
+            --card: #141414;
+        }
+
+        body { 
+            background-color: var(--bg); 
+            color: white; 
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+        }
+
+        /* Navigation Bar */
+        .user-nav { 
+            position: fixed; top: 0; left: 0; width: 100%; 
+            padding: 15px 5%; background: rgba(20, 20, 20, 0.95); 
+            backdrop-filter: blur(10px); border-bottom: 1px solid #222; 
+            display: flex; justify-content: space-between; align-items: center; 
+            z-index: 1000; box-sizing: border-box;
+        }
+        .logo { font-weight: 800; letter-spacing: 1px; font-size: 1.2rem; }
+        
+        .user-profile {
+            display: none;
+            text-align: right;
+        }
+
+        #logoutBtn {
+            background: rgba(255,255,255,0.05); border: 1px solid #333;
+            color: #ccc; padding: 8px 16px; border-radius: 6px;
+            cursor: pointer; font-weight: 600; transition: 0.3s;
+        }
+        #logoutBtn:hover { background: #ff4444; color: white; border-color: #ff4444; }
+
+        /* Header & Search */
+        .vault-header { 
+            padding: 140px 20px 40px; text-align: center; 
+            background: linear-gradient(to bottom, #111, var(--bg));
+        }
+        .vault-header h1 { font-size: 2.5rem; margin-bottom: 10px; color: var(--primary); }
+        .vault-header p { color: #888; font-size: 1.1rem; margin-bottom: 25px;}
+        
+        .vault-search {
+            position: relative; max-width: 500px; margin: 0 auto;
+        }
+        .vault-search i {
+            position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: #888;
+        }
+        .vault-search input {
+            width: 100%; padding: 15px 20px 15px 50px; border-radius: 30px;
+            border: 1px solid #333; background: #1a1a1a; color: white;
+            font-size: 1rem; outline: none; transition: 0.3s; box-sizing: border-box;
+        }
+        .vault-search input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(255, 152, 0, 0.2); }
+
+        /* Grid System */
+        .vault-grid { 
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 25px; padding: 0 5% 100px; max-width: 1400px; margin: auto; 
+        }
+
+        /* Movie Card Design */
+        .dl-card { 
+            background: var(--card); border-radius: 15px; overflow: hidden; 
+            border: 1px solid #222; transition: all 0.4s ease; position: relative;
+        }
+        .dl-card:hover { 
+            transform: translateY(-5px); border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(255, 152, 0, 0.15);
+        }
+        .dl-card img { 
+            width: 100%; height: 180px; object-fit: contain; 
+            background: #1a1a1a; padding: 20px; box-sizing: border-box; border-bottom: 1px solid #222;
+        }
+
+        .dl-info { padding: 20px; }
+        .dl-info h3 { font-size: 1.1rem; margin: 0 0 15px 0; color: #efefef; }
+
+        /* Multi-Links Container */
+        .dl-links-container {
+            display: flex; flex-direction: column; gap: 10px;
+        }
+
+        .dl-btn { 
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            padding: 10px; border-radius: 8px; font-weight: 600; font-size: 0.9rem;
+            text-decoration: none; transition: 0.3s;
+        }
+        .dl-btn:hover { transform: scale(1.02); filter: brightness(1.1); }
+
+        /* Badges */
+        .badge-container {
+            position: absolute; top: 15px; left: 15px; right: 15px;
+            display: flex; justify-content: space-between; z-index: 2; pointer-events: none;
+        }
+        .dl-badge {
+            background: var(--primary); color: black; font-size: 0.7rem;
+            font-weight: 900; padding: 4px 10px; border-radius: 4px; text-transform: uppercase;
+        }
+        .new-badge {
+            background: #4caf50; color: white; font-size: 0.7rem;
+            font-weight: 900; padding: 4px 10px; border-radius: 4px; text-transform: uppercase;
+        }
+
+        /* Mobile Adjustments */
+        @media (min-width: 600px) {
+            .user-profile { display: block; }
+        }
+
+        @media (max-width: 768px) {
+            .vault-header h1 { font-size: 1.8rem; }
+            .user-nav { padding: 15px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="user-nav">
+        <div class="logo">Movies-J <span style="color:var(--primary)">VAULT</span></div>
+        <div style="display:flex; align-items:center; gap:20px;">
+            <div class="user-profile">
+                <span id="userName" style="font-size:0.85rem; font-weight:600; color:#fff; display:block;">Checking Auth...</span>
+                <span style="font-size:0.7rem; color:var(--primary);">Verified Supporter</span>
+            </div>
+            <button id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </nav>
+
+    <div class="vault-header">
+        <div style="margin-bottom: 15px;">
+            <i class="fas fa-unlock-alt" style="color: var(--primary); font-size: 2rem;"></i>
+        </div>
+        <h1>Premium Downloads</h1>
+        <p>Direct access to your favorite movies.</p>
+        
+        <div class="vault-search">
+            <i class="fas fa-search"></i>
+            <input type="text" id="vaultSearchInput" placeholder="Search movies...">
+        </div>
+
+        <div class="vault-filters" style="margin-top: 15px; display: flex; justify-content: center;">
+            <select id="vaultCategorySelect" style="padding: 10px 20px; border-radius: 20px; background: #1a1a1a; color: white; border: 1px solid #333; outline: none; cursor: pointer; font-family: 'Inter', sans-serif;">
+                <option value="all">All Categories</option>
+                <option value="action">Action & Adventure</option>
+                <option value="comedy">Comedy</option>
+                <option value="horror">Horror & Thriller</option>
+                <option value="romance">Romance & Drama</option>
+                <option value="scifi">Sci-Fi & Fantasy</option>
+                <option value="animation">Animation & Anime</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="vault-grid" id="vaultContainer">
+        </div>
+
+   
+    <script type="module" src="js/vault.js"></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+/* ===== PWA INSTALL BANNER STYLES ===== */
+
+.install-banner {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 95%;
+    max-width: 450px;
+    background-color: var(--light-dark-color);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    z-index: 2500;
+    
+    /* IN-UPDATE: Itago by default gamit ang visibility at opacity para sa animation */
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    transform: translateX(-50%) translateY(20px); /* Initial position for slide-up effect */
+}
+
+/* Class na idadagdag ng JS para ipakita ang banner */
+.install-banner.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.install-banner-icon img {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+}
+
+.install-banner-text h3 {
+    margin: 0 0 5px;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.install-banner-text p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #ccc;
+}
+
+.install-banner-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 10px;
+}
+
+#install-app-btn {
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+#install-app-btn:hover {
+    opacity: 0.8;
+}
+
+#dismiss-install-btn {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+}
+
+/* BAGO: Media Query para itago ang banner sa desktop */
+@media (min-width: 769px) {
+    .install-banner {
+        display: none !important; /* Force hide on desktop */
+    }
+}

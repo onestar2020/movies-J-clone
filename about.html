@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>About Us - Movies-J</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="images/logo-192.png" type="image/png">
+    <meta name="theme-color" content="#e50914">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/dropdown.css">
+    <link rel="stylesheet" href="css/movie-cards.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <img src="images/logo-512.png" alt="Movies-J Logo" class="logo-effect" />
+            <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="browse.html?type=movie">Movies</a>
+    <a href="browse.html?type=tv">TV Shows</a>
+    <a href="browse.html?type=anime">Anime</a>
+   <a href="vault.html" style="color: #ff9800; font-weight: bold;">
+    <i class="fas fa-lock"></i> J-Vault DOWNLOADS
+</a>
+
+
+
+    </div>
+            <div class="nav-actions">
+                <i class="fas fa-search" onclick="openSearchModal()"></i>
+                <button class="watch-history-btn" title="Watch History">
+                    <i class="fas fa-history"></i>
+                </button>
+                <button id="install-btn" style="display: none;" title="Install App">
+                    <i class="fas fa-download"></i>
+                </button>
+            </div>
+            <div class="hamburger-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="static-page-container">
+        <div class="static-page-content">
+            <h1>About Us</h1>
+            <p>
+                <strong>Movies-J</strong> is a platform created to provide free and easy access to movies, anime, and select TV shows in a clean and user-friendly environment.
+            </p>
+            <p>
+                Our platform highlights trending titles by embedding content from publicly available third-party sources. All content is featured for informational and entertainment purposes only, with a focus on accessibility.
+            </p>
+            <p>
+                We do not host any media on our servers. Instead, we simply aggregate and provide links to publicly accessible media sources for community sharing and educational purposes.
+            </p>
+            <p>
+                Movies-J is committed to delivering a seamless and respectful viewing experience while supporting responsible content sharing and fair-use awareness.
+            </p>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 Movies-J. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="disclaimer.html">Disclaimer</a>
+                <a href="about.html">About Us</a>
+                <a href="contact.html">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+
+    <div class="search-modal" id="search-modal">
+      <div class="search-content">
+          <button class="close" onclick="closeSearchModal()">&times;</button>
+          <div class="search-input-container">
+              <i class="fas fa-search"></i>
+              <input type="text" id="search-input" placeholder="Search for movies, TV shows, or anime..." oninput="searchTMDB()" />
+          </div>
+          <div class="results" id="search-results"></div>
+          <div id="no-results-message" style="display: none; color: #888; text-align: center; margin-top: 40px;">
+              <p>No results found. Try a different keyword.</p>
+          </div>
+      </div>
+    </div>
+    <div class="modal" id="watch-history-modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <span class="close" id="close-history-modal">&times;</span>
+            <h2 style="text-align:center; margin-top: 15px;">Watch History</h2>
+            <div id="watch-history-list"></div>
+        </div>
+    </div>
+    <div class="modal" id="details-modal">
+      <div class="details-modal-content">
+        <span class="close" id="close-details-modal">&times;</span>
+        <div class="modal-backdrop"></div>
+        <div class="modal-body">
+            <img id="modal-poster" src="" alt="Poster">
+            <div class="modal-text">
+                <h1 id="modal-title">Movie Title</h1>
+                <div class="modal-meta">
+                    <span id="modal-rating">⭐ 8.5</span>
+                    <span id="modal-release">2024</span>
+                </div>
+                <p id="modal-description">This is the full movie description...</p>
+                <div class="modal-genres" id="modal-genres"></div>
+                <div class="modal-buttons">
+                    <button class="btn btn-primary" id="modal-watch-btn">
+                        <i class="fas fa-play"></i> Watch Now
+                    </button>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    
+    <script src="js/home.js" defer></script>
+    <script src="js/watchHistory.js" defer></script>
+    <script src="js/antiInspect.js" defer></script>
+</body>
+</html>

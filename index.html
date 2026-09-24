@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Movies-J Official Site</title>
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="images/logo-192.png" type="image/png">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/movie-cards.css">
+  <link rel="stylesheet" href="css/changelog.css">
+  <link rel="stylesheet" href="css/pwa.css">
+  <link rel="stylesheet" href="css/dropdown.css">
+  <link rel="stylesheet" href="css/features.css">
+  <link rel="stylesheet" href="css/modern-nav.css">
+</head>
+
+<body>
+  <!-- Splash -->
+  <div id="splash-screen">
+    <img src="images/logo-512.png" alt="Movies-J Logo" id="splash-logo" />
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <img src="images/logo-512.png" alt="Movies-J Logo" class="logo-effect" />
+        <div id="online-counter-badge" title="Users Currently Online">
+          <div id="online-dot"></div>
+          <span id="online-count">1</span> Online
+        </div>
+      </div>
+
+      <div class="nav-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="browse.html?type=movie">Movies</a>
+        <a href="browse.html?type=tv">TV Shows</a>
+        <a href="browse.html?type=anime">Anime</a>
+        <a id="supportBtn">Donations 💖</a>
+      </div>
+
+      <div class="nav-actions">
+        <div id="auth-nav-container"></div>
+        <button id="changelog-btn" class="changelog-nav-btn" title="What's New">
+          <i class="fas fa-bell"></i>
+        </button>
+        <button id="watchlist-btn" class="watchlist-nav-btn" title="My Watchlist">
+          <i class="fas fa-bookmark"></i>
+        </button>
+        <i class="fas fa-search" style="cursor: pointer;"></i>
+        <button class="watch-history-btn" title="Watch History">
+          <i class="fas fa-history"></i>
+        </button>
+        <div class="hamburger-menu">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero-section" id="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title" id="hero-title">Loading...</h1>
+      <p class="hero-description" id="hero-description"></p>
+      <div class="hero-buttons">
+        <button class="btn btn-primary" id="hero-watch-btn">
+          <i class="fas fa-play"></i> Watch Now
+        </button>
+        <button class="btn btn-secondary" id="hero-info-btn">
+          <i class="fas fa-info-circle"></i> More Info
+        </button>
+      </div>
+    </div>
+    <div class="hero-fade"></div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-container">
+    <!-- Filter Chips -->
+    <div class="filter-chips-wrapper">
+      <div class="filter-chips-container" id="filter-chips">
+        <button class="filter-chip active" data-filter="all">
+          <i class="fas fa-layer-group"></i> All
+        </button>
+        <button class="filter-chip" data-filter="action">
+          <i class="fas fa-fire"></i> Action
+        </button>
+        <button class="filter-chip" data-filter="anime">
+          <i class="fas fa-dragon"></i> Anime
+        </button>
+        <button class="filter-chip" data-filter="kdrama">
+          <i class="fas fa-heart"></i> K-Drama
+        </button>
+        <button class="filter-chip" data-filter="top_rated">
+          <i class="fas fa-star"></i> Top Rated
+        </button>
+      </div>
+    </div>
+
+    <!-- Continue Watching -->
+    <div class="row" id="continue-watching-row" style="display: none;">
+      <h2>Continue Watching</h2>
+      <div class="list-container">
+        <div class="list" id="continue-watching-list"></div>
+      </div>
+    </div>
+
+    <!-- Trending Movies -->
+    <div class="row" id="movies-row">
+      <h2>Trending Movies</h2>
+      <div class="list-container">
+        <div class="list" id="movies-list"></div>
+      </div>
+    </div>
+
+    <!-- Trending TV Shows -->
+    <div class="row" id="tvshows-row">
+      <h2>Trending TV Shows</h2>
+      <div class="list-container">
+        <div class="list" id="tvshows-list"></div>
+      </div>
+    </div>
+
+    <!-- Trending Anime -->
+    <div class="row" id="anime-row">
+      <h2>Trending Anime</h2>
+      <div class="list-container">
+        <div class="list" id="anime-list"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p id="adminTrigger">&copy; 2026 Movies-J. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="disclaimer.html">Disclaimer</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact Us</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Search Modal -->
+  <div class="search-modal" id="search-modal">
+    <div class="search-content">
+      <button class="close">&times;</button>
+      <div class="search-input-container">
+        <i class="fas fa-search"></i>
+        <input type="text" id="search-input" placeholder="Search movies, TV shows, anime..." oninput="debounceSearch()" />
+      </div>
+      <div class="results" id="search-results"></div>
+      <div id="no-results-message" style="display: none;">No results found.</div>
+    </div>
+  </div>
+
+  <!-- Watchlist Modal -->
+  <div class="modal" id="watchlist-modal">
+    <div class="modal-content" style="max-width: 800px;">
+      <span class="close" id="close-watchlist-modal">&times;</span>
+      <h2><i class="fas fa-bookmark" style="color: #e50914; margin-right: 8px;"></i>My Watchlist</h2>
+      <div id="watchlist-list"></div>
+    </div>
+  </div>
+
+  <!-- Watch History Modal -->
+  <div class="modal" id="watch-history-modal">
+    <div class="modal-content" style="max-width: 800px;">
+      <span class="close" id="close-history-modal">&times;</span>
+      <h2>Watch History</h2>
+      <div id="watch-history-list"></div>
+    </div>
+  </div>
+
+  <!-- Details Modal -->
+  <div class="modal" id="details-modal">
+    <div class="details-modal-content">
+      <span class="close" id="close-details-modal">&times;</span>
+      <div class="modal-backdrop"></div>
+      <div class="modal-body">
+        <img id="modal-poster" src="" alt="Poster">
+        <div class="modal-text">
+          <h1 id="modal-title"></h1>
+          <div class="modal-meta">
+            <span id="modal-rating"></span>
+            <span id="modal-release"></span>
+          </div>
+          <p id="modal-description"></p>
+          <div class="modal-genres" id="modal-genres"></div>
+          <div class="modal-buttons">
+            <button class="btn btn-primary" id="modal-watch-btn">
+              <i class="fas fa-play"></i> Watch Now
+            </button>
+            <button class="btn btn-secondary" id="modal-watchlist-btn">
+              <i class="fas fa-bookmark"></i> <span id="modal-watchlist-text">Watchlist</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts (keep your existing ones) -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/home.js"></script>
+  <script src="js/modern-nav.js"></script>
+  <script src="js/watchHistory.js"></script>
+  <script src="js/changelog.js"></script>
+  <!-- Add other scripts as needed -->
+</body>
+</html>

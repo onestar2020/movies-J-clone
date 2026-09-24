@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movies-J - Master Admin Control Panel</title>
+  <link rel="icon" href="images/logo-192.png" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    :root { --primary: #e50914; --bg: #0d0d0d; --card: #181818; --border: #282828; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: #fff; font-family: 'Poppins', sans-serif; padding: 20px; }
+
+    .admin-wrapper { max-width: 980px; margin: 0 auto; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+    .header-bar { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 20px; }
+    .admin-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #4caf50; font-weight: 600; }
+
+    /* Navigation Tabs */
+    .tab-nav { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 20px; }
+    .tab-btn { padding: 10px 6px; background: #222; border: 1px solid #333; color: #aaa; border-radius: 6px; font-weight: 600; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.2s; white-space: nowrap; }
+    .tab-btn:hover { background: #2a2a2a; color: #fff; }
+    .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    /* Filter Tools */
+    .filter-bar { display: flex; gap: 10px; margin-bottom: 15px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+    .filter-btn-group { display: flex; gap: 6px; }
+    .filter-chip { background: #222; border: 1px solid #333; color: #888; padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+    .filter-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .search-inbox { padding: 6px 12px; background: #222; border: 1px solid #333; border-radius: 6px; color: #fff; font-size: 12px; outline: none; width: 220px; font-family: inherit; }
+
+    /* Forms */
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 12px; color: #888; margin-bottom: 5px; }
+    .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px; background: #222; border: 1px solid #333; border-radius: 6px; color: #fff; font-size: 13px; font-family: inherit; outline: none; }
+    .submit-btn { width: 100%; padding: 11px; background: var(--primary); border: none; border-radius: 6px; color: #fff; font-weight: 600; cursor: pointer; margin-top: 5px; }
+
+    /* Lists */
+    .feed-list { display: flex; flex-direction: column; gap: 12px; max-height: 580px; overflow-y: auto; padding-right: 4px; }
+    .feed-card { background: #202020; border: 1px solid var(--border); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+    .feed-card.replied { border-left: 4px solid #4caf50; }
+    .feed-card.pending { border-left: 4px solid #ff9800; }
+    
+    .card-top-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .del-btn { background: rgba(229,9,20,0.15); border: 1px solid #e50914; color: #e50914; padding: 6px 10px; border-radius: 4px; font-size: 12px; cursor: pointer; transition: 0.2s; }
+    .del-btn:hover { background: var(--primary); color: #fff; }
+
+    /* User Management Row Layout Styling */
+    .user-card-row {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 10px !important;
+      width: 100% !important;
+      padding: 14px 18px !important;
+      background: #1f1f1f !important;
+      border: 1px solid #2a2a2a !important;
+      border-radius: 10px !important;
+      margin-bottom: 10px !important;
+      box-sizing: border-box !important;
+    }
+    .user-card-row.is-banned { border-left: 4px solid #e50914 !important; }
+    .user-card-row.is-active { border-left: 4px solid #4caf50 !important; }
+
+    .user-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .user-controls-grid {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      background: rgba(0,0,0,0.35);
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .user-control-field {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .user-control-field label {
+      font-size: 11px;
+      color: #aaa;
+      font-weight: 600;
+    }
+    .user-control-select {
+      background: #141414;
+      color: #fff;
+      border: 1px solid #444;
+      border-radius: 6px;
+      padding: 5px 8px;
+      font-size: 11px;
+      outline: none;
+      cursor: pointer;
+    }
+    .user-control-select:focus {
+      border-color: var(--primary);
+    }
+
+    /* Lightbox Modal */
+    #image-lightbox-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.92); z-index: 999999; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
+    #image-lightbox-modal img { max-width: 90vw; max-height: 85vh; border-radius: 8px; border: 1px solid #444; box-shadow: 0 10px 40px rgba(0,0,0,0.9); object-fit: contain; }
+    #image-lightbox-close { position: absolute; top: 20px; right: 25px; font-size: 28px; color: #fff; cursor: pointer; background: rgba(255,255,255,0.1); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+    #image-lightbox-close:hover { background: #e50914; }
+
+    #auth-gate { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #0d0d0d; z-index: 99999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 15px; text-align: center; }
+  </style>
+</head>
+<body>
+
+  <!-- LIGHTBOX IMAGE VIEWER MODAL -->
+  <div id="image-lightbox-modal">
+    <span id="image-lightbox-close">&times;</span>
+    <img id="lightbox-img-element" src="" alt="Full Attachment Preview">
+  </div>
+
+  <!-- AUTH GATEWAY -->
+  <div id="auth-gate">
+    <i class="fas fa-shield-alt" style="font-size: 40px; color: var(--primary);"></i>
+    <h3 style="color:#fff; font-size: 1.2rem;">Movies-J Admin Security Gate</h3>
+    <p style="color: #777; font-size: 13px;">Checking administrative privileges for <strong style="color:#fff;">jayjovendinawanao2020@gmail.com</strong>...</p>
+    <button id="admin-login-btn" style="padding: 10px 22px; background: var(--primary); border: none; border-radius: 6px; color: #fff; font-weight: 600; cursor: pointer; margin-top: 10px;">Sign in with Google Admin</button>
+  </div>
+
+  <!-- ADMIN DASHBOARD -->
+  <div class="admin-wrapper" id="admin-panel-ui" style="display:none;">
+    
+    <div class="header-bar">
+      <div>
+        <h2 style="font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
+          <i class="fas fa-clapperboard" style="color: var(--primary);"></i> Movies-J Control Panel
+        </h2>
+        <span class="admin-badge"><i class="fas fa-circle-check"></i> Admin: jayjovendinawanao2020@gmail.com</span>
+      </div>
+      <a href="index.html" style="color: #888; text-decoration: none; font-size: 13px;"><i class="fas fa-arrow-left"></i> Exit to Website</a>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="tab-nav">
+      <button class="tab-btn active" data-tab="tab-messages"><i class="fas fa-envelope"></i> Inquiries (<span id="msg-count">0</span>)</button>
+      <button class="tab-btn" data-tab="tab-comments"><i class="fas fa-comments"></i> Comments (<span id="comment-count">0</span>)</button>
+      <button class="tab-btn" data-tab="tab-users"><i class="fas fa-users"></i> Users</button>
+      <button class="tab-btn" data-tab="tab-donors"><i class="fas fa-heart"></i> Supporters (<span id="donor-count">0</span>)</button>
+      <button class="tab-btn" data-tab="tab-logs"><i class="fas fa-rocket"></i> Updates (<span id="log-count">0</span>)</button>
+    </div>
+
+    <!-- TAB 1: USER INQUIRIES -->
+    <div id="tab-messages" class="tab-content">
+      <div class="filter-bar">
+        <div class="filter-btn-group">
+          <button class="filter-chip active" data-filter="all">All</button>
+          <button class="filter-chip" data-filter="pending">Pending Reply</button>
+          <button class="filter-chip" data-filter="replied">Answered</button>
+        </div>
+        <input type="text" id="msg-search-input" class="search-inbox" placeholder="Search user or message..." />
+      </div>
+      <div id="admin-messages-list" class="feed-list">
+        <p style="color:#777; text-align:center; padding:20px;">Loading messages...</p>
+      </div>
+    </div>
+
+    <!-- TAB 2: MANAGE ALL COMMENTS -->
+    <div id="tab-comments" class="tab-content" style="display:none;">
+      <h4 style="font-size: 13px; color: #aaa; margin-bottom: 10px;">Live User Discussions (All Titles):</h4>
+      <div id="admin-comments-list" class="feed-list">
+        <p style="color:#777; text-align:center; padding:20px;">Loading comments...</p>
+      </div>
+    </div>
+
+    <!-- TAB 3: MANAGE USERS -->
+    <div id="tab-users" class="tab-content" style="display:none;">
+      <h4 style="font-size: 13px; color: #aaa; margin-bottom: 10px;">Registered Site Users & VIP Customizations:</h4>
+      <div id="admin-users-list" class="feed-list">
+        <p style="color:#777; text-align:center; padding:20px;">Loading users...</p>
+      </div>
+    </div>
+
+    <!-- TAB 4: SUPPORTERS -->
+    <div id="tab-donors" class="tab-content" style="display:none;">
+      <form id="add-donor-form" style="background:#202020; border:1px solid var(--border); padding:16px; border-radius:8px; margin-bottom:15px;">
+        <div class="form-group">
+          <label>Donor Display Name</label>
+          <input type="text" id="donor-name" placeholder="e.g. Mark D." required>
+        </div>
+        <div class="form-group">
+          <label>Amount Donated (₱)</label>
+          <input type="number" id="donor-amount" placeholder="e.g. 200" required>
+        </div>
+        <div class="form-group">
+          <label>Message / Note</label>
+          <input type="text" id="donor-msg" placeholder="e.g. Salamat idol Jay!">
+        </div>
+        <button type="submit" class="submit-btn">+ Add Supporter to Live Wall</button>
+      </form>
+      <h4 style="font-size: 13px; color: #aaa; margin-bottom: 8px;">Current Live Supporters:</h4>
+      <div id="admin-donors-list" class="feed-list"></div>
+    </div>
+
+    <!-- TAB 5: SYSTEM UPDATES -->
+    <div id="tab-logs" class="tab-content" style="display:none;">
+      <form id="add-log-form" style="background:#202020; border:1px solid var(--border); padding:16px; border-radius:8px; margin-bottom:15px;">
+        <div class="form-group">
+          <label>Tag / Version Badge</label>
+          <input type="text" id="log-ver" placeholder="e.g. v2.8 or WARNING or NEW" required>
+        </div>
+        <div class="form-group">
+          <label>Summary / Title</label>
+          <input type="text" id="log-title" placeholder="e.g. In-App User Support & Realtime Comments" required>
+        </div>
+        <div class="form-group">
+          <label>Bullet Items / Notes (Isang linya bawat bullet)</label>
+          <textarea id="log-notes" rows="4" placeholder="• Pwede nang mag-message sa admin&#10;• Inayos ang server playback" required></textarea>
+        </div>
+        <button type="submit" class="submit-btn">+ Publish Update Log</button>
+      </form>
+      <h4 style="font-size: 13px; color: #aaa; margin-bottom: 8px;">Active System Updates:</h4>
+      <div id="admin-logs-list" class="feed-list"></div>
+    </div>
+
+  </div>
+
+  <!-- SCRIPTS -->
+  <script type="module">
+    import { auth, provider, db } from "./js/firebase-config.js";
+    import { signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { 
+      collection, 
+      addDoc, 
+      deleteDoc, 
+      updateDoc, 
+      setDoc,
+      doc, 
+      onSnapshot, 
+      serverTimestamp 
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const DEDICATED_ADMIN_EMAIL = "jayjovendinawanao2020@gmail.com";
+    const authGate = document.getElementById("auth-gate");
+    const adminPanel = document.getElementById("admin-panel-ui");
+
+    // Global User Reward Controller
+    window.updateUserReward = async function(userId, field, value) {
+      if (!userId) return;
+      try {
+        const userRef = doc(db, "users", userId);
+        await setDoc(userRef, { [field]: value }, { merge: true });
+        console.log(`Updated ${field} for user ${userId} to ${value}`);
+      } catch (err) {
+        console.error("Error updating user reward:", err);
+        alert("Failed to update user reward.");
+      }
+    };
+
+    // Lightbox Modal Handlers
+    const lightboxModal = document.getElementById("image-lightbox-modal");
+    const lightboxImg = document.getElementById("lightbox-img-element");
+    const lightboxClose = document.getElementById("image-lightbox-close");
+
+    function openLightbox(src) {
+      if (lightboxImg && lightboxModal) {
+        lightboxImg.src = src;
+        lightboxModal.style.display = "flex";
+      }
+    }
+
+    if (lightboxClose) {
+      lightboxClose.onclick = () => { lightboxModal.style.display = "none"; };
+    }
+    if (lightboxModal) {
+      lightboxModal.onclick = (e) => {
+        if (e.target === lightboxModal) lightboxModal.style.display = "none";
+      };
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      if (user && user.email === DEDICATED_ADMIN_EMAIL) {
+        authGate.style.display = "none";
+        adminPanel.style.display = "block";
+        initDashboardData();
+      } else {
+        authGate.style.display = "flex";
+        adminPanel.style.display = "none";
+      }
+    });
+
+    document.getElementById("admin-login-btn").onclick = async () => {
+      try {
+        const res = await signInWithPopup(auth, provider);
+        if (res.user.email !== DEDICATED_ADMIN_EMAIL) {
+          alert("Access Denied: You are not authorized.");
+          window.location.href = "access-denied.html";
+        }
+      } catch (e) { console.error(e); }
+    };
+
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".tab-content").forEach(c => c.style.display = "none");
+        btn.classList.add("active");
+        const target = document.getElementById(btn.getAttribute("data-tab"));
+        if (target) target.style.display = "block";
+      };
+    });
+
+    let globalMessages = [];
+    let currentFilter = "all";
+
+    function renderMessages() {
+      const msgList = document.getElementById("admin-messages-list");
+      const searchVal = (document.getElementById("msg-search-input")?.value || "").toLowerCase();
+
+      let filtered = globalMessages.filter(m => {
+        if (currentFilter === "pending") return !m.adminReply;
+        if (currentFilter === "replied") return !!m.adminReply;
+        return true;
+      });
+
+      if (searchVal) {
+        filtered = filtered.filter(m => 
+          (m.senderName || "").toLowerCase().includes(searchVal) ||
+          (m.message || "").toLowerCase().includes(searchVal) ||
+          (m.senderEmail || "").toLowerCase().includes(searchVal)
+        );
+      }
+
+      msgList.innerHTML = filtered.length === 0 ? `<p style="color:#777; text-align:center; padding:25px;">No messages in this view.</p>` : "";
+
+      filtered.forEach(m => {
+        const isAnswered = !!m.adminReply;
+        const card = document.createElement("div");
+        card.className = `feed-card ${isAnswered ? 'replied' : 'pending'}`;
+
+        card.innerHTML = `
+          <div class="card-top-row">
+            <div style="flex:1;">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                <strong style="color:#fff; font-size:13px;">${m.senderName}</strong>
+                <span style="font-size:10px; color:${isAnswered ? '#4caf50' : '#ff9800'}; background:rgba(255,255,255,0.05); padding:2px 6px; border-radius:4px; font-weight:600;">
+                  ${isAnswered ? '● Answered' : '● Pending'}
+                </span>
+                <span style="font-size:11px; color:#e50914; background:rgba(229,9,20,0.1); padding:2px 6px; border-radius:4px;">${m.category}</span>
+              </div>
+              <p style="font-size:11px; color:#888; margin-bottom:6px;">From: ${m.senderEmail}</p>
+              ${m.message ? `<p style="font-size:13px; color:#ddd; background:#181818; padding:8px 12px; border-radius:6px; border:1px solid #282828; margin-bottom:8px;">${m.message}</p>` : ''}
+              ${m.attachment ? `
+                <div style="margin-top:6px;">
+                  <span style="font-size:11px; color:#888; display:block; margin-bottom:4px;"><i class="fas fa-image"></i> Attachment (Click to View):</span>
+                  <img src="${m.attachment}" class="admin-zoomable-img" data-full="${m.attachment}" style="max-height:110px; max-width:200px; border-radius:6px; border:1px solid #444; object-fit:cover; cursor:pointer;" title="Click to view full image" />
+                </div>
+              ` : ''}
+              ${isAnswered ? `
+                <div style="margin-top:8px; background:#19271a; border-left:3px solid #4caf50; padding:8px 12px; border-radius:4px;">
+                  <span style="font-size:11px; color:#4caf50; font-weight:bold;"><i class="fas fa-reply"></i> Your Reply:</span>
+                  <p style="font-size:12px; color:#ddd; margin-top:2px;">${m.adminReply}</p>
+                </div>
+              ` : ''}
+            </div>
+            <button class="del-btn" data-id="${m.id}" title="Delete Message"><i class="fas fa-trash-alt"></i></button>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center; border-top:1px solid #282828; padding-top:10px; margin-top:4px;">
+            <input type="text" class="inapp-reply-input" placeholder="Type response to ${m.senderName}..." style="flex:1; padding:8px 12px; background:#181818; border:1px solid #333; color:#fff; border-radius:6px; font-size:12px; outline:none;" value="${m.adminReply || ''}" />
+            <button class="send-inapp-reply-btn" data-id="${m.id}" style="padding:8px 16px; background:#e50914; border:none; color:#fff; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer;">${isAnswered ? 'Update Reply' : 'Send Reply'}</button>
+          </div>
+        `;
+        msgList.appendChild(card);
+      });
+
+      msgList.onclick = (e) => {
+        const targetImg = e.target.closest(".admin-zoomable-img");
+        if (targetImg) openLightbox(targetImg.getAttribute("data-full"));
+      };
+
+      msgList.querySelectorAll(".del-btn").forEach(btn => {
+        btn.onclick = () => {
+          if (confirm("Delete this message?")) deleteDoc(doc(db, "admin_messages", btn.getAttribute("data-id")));
+        };
+      });
+
+      msgList.querySelectorAll(".send-inapp-reply-btn").forEach(btn => {
+        btn.onclick = async () => {
+          const cardElem = btn.closest(".feed-card");
+          const replyText = cardElem.querySelector(".inapp-reply-input").value.trim();
+          const msgId = btn.getAttribute("data-id");
+          if (!replyText) return alert("Please type your reply first.");
+
+          btn.disabled = true;
+          btn.textContent = "Saving...";
+          try {
+            await updateDoc(doc(db, "admin_messages", msgId), {
+              adminReply: replyText,
+              repliedAt: serverTimestamp()
+            });
+            alert("Reply sent!");
+          } catch (e) {
+            console.error(e);
+            alert("Failed to save reply.");
+          } finally {
+            btn.disabled = false;
+            btn.textContent = "Send Reply";
+          }
+        };
+      });
+    }
+
+    function initDashboardData() {
+      // 1. Inquiries
+      onSnapshot(collection(db, "admin_messages"), (snap) => {
+        document.getElementById("msg-count").textContent = snap.size;
+        globalMessages = [];
+        snap.forEach(d => globalMessages.push({ id: d.id, ...d.data() }));
+        globalMessages.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+        renderMessages();
+      });
+
+      document.querySelectorAll(".filter-chip").forEach(chip => {
+        chip.onclick = () => {
+          document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
+          chip.classList.add("active");
+          currentFilter = chip.getAttribute("data-filter");
+          renderMessages();
+        };
+      });
+      document.getElementById("msg-search-input")?.addEventListener("input", renderMessages);
+
+  // 2. Comments Moderation with Live Border & Glow Rendering
+      const commList = document.getElementById("admin-comments-list");
+      const BORDER_CLASSES = {
+        emerald: "avatar-border-vip",
+        cyber: "avatar-border-cyber",
+        fire: "avatar-border-fire",
+        gold: "avatar-border-gold",
+        amethyst: "avatar-border-amethyst",
+        rainbow: "avatar-border-rainbow"
+      };
+      const GLOW_CLASSES = {
+        emerald: "name-glow-emerald",
+        blue: "name-glow-blue",
+        red: "name-glow-red",
+        gold: "name-glow-gold",
+        purple: "name-glow-purple",
+        rgb: "name-glow-rgb"
+      };
+      function getAdminRoleBadge(role) {
+        switch (role) {
+          case "admin": return `<span class="user-role role-admin" style="font-size:9px; padding:1px 5px; margin-left:4px;"><i class="fas fa-shield-alt"></i> Admin</span>`;
+          case "legendary": return `<span class="user-role role-legendary" style="font-size:9px; padding:1px 5px; margin-left:4px;"><i class="fas fa-gem"></i> LEGENDARY</span>`;
+          case "top-donor": return `<span class="user-role role-top-donor" style="font-size:9px; padding:1px 5px; margin-left:4px;"><i class="fas fa-crown"></i> TOP DONOR</span>`;
+          case "vip": return `<span class="user-role role-vip" style="font-size:9px; padding:1px 5px; margin-left:4px;"><i class="fas fa-star"></i> VIP</span>`;
+          default: return "";
+        }
+      }
+
+      onSnapshot(collection(db, "comments"), (snap) => {
+        document.getElementById("comment-count").textContent = snap.size;
+        commList.innerHTML = snap.size === 0 ? `<p style="color:#777; text-align:center; padding:20px;">No comments found.</p>` : "";
+
+        const comms = [];
+        snap.forEach(d => comms.push({ id: d.id, ...d.data() }));
+        comms.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+        comms.forEach(c => {
+          const borderClass = BORDER_CLASSES[c.avatarBorder] || "";
+          const glowClass = GLOW_CLASSES[c.nameGlow] || "";
+          const roleBadge = getAdminRoleBadge(c.role);
+
+          const card = document.createElement("div");
+          card.className = "feed-card";
+          card.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; width:100%;">
+              <div style="flex:1;">
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px; flex-wrap:wrap;">
+                  <img src="${c.userPhoto || 'images/logo-192.png'}" class="${borderClass}" style="width:28px; height:28px; border-radius:50%; object-fit:cover; background:#111;">
+                  <strong class="${glowClass}" style="font-size:13px; font-weight:700;">${c.userName || 'User'}</strong>
+                  ${roleBadge}
+                  <span style="font-size:11px; background:#333; color:#ffb74d; padding:2px 6px; border-radius:4px;">${c.mediaTitle || 'Title'}</span>
+                </div>
+                <p style="font-size:13px; color:#ddd; background:#181818; padding:8px 12px; border-radius:6px; border:1px solid #333; margin-top:5px;">${c.text}</p>
+              </div>
+              <button class="del-btn" data-id="${c.id}" style="margin-left:10px;" title="Delete Comment"><i class="fas fa-trash-alt"></i> Delete</button>
+            </div>
+          `;
+          commList.appendChild(card);
+        });
+
+        commList.querySelectorAll(".del-btn").forEach(btn => {
+          btn.onclick = () => {
+            if (confirm("Delete comment?")) deleteDoc(doc(db, "comments", btn.getAttribute("data-id")));
+          };
+        });
+      });
+
+      // 3. User Management (May Rank, Border, at Glow Selectors na may persistent select values)
+      const userList = document.getElementById("admin-users-list");
+      onSnapshot(collection(db, "users"), (snap) => {
+        userList.innerHTML = snap.size === 0 ? `<p style="color:#777; text-align:center; padding:20px;">No registered users.</p>` : "";
+
+        snap.forEach(docSnap => {
+          const u = docSnap.data();
+          const uId = docSnap.id;
+          const isBanned = u.isBanned === true;
+          const userEmail = u.email || 'No email';
+          const currentRole = u.role || 'free';
+          const currentBorder = u.avatarBorder || 'none';
+          const currentGlow = u.nameGlow || 'none';
+
+          const card = document.createElement("div");
+          card.className = `user-card-row ${isBanned ? 'is-banned' : 'is-active'}`;
+
+          card.innerHTML = `
+            <div class="user-card-top">
+              <div style="display:flex; align-items:center; gap:12px; min-width:0;">
+                <img src="${u.photoURL || 'images/logo-192.png'}" style="width:38px; height:38px; border-radius:50%; object-fit:cover; border:1px solid #333; flex-shrink:0;">
+                <div style="display:flex; flex-direction:column; gap:2px; min-width:0;">
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <strong style="font-size:13px; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${u.displayName || 'User'}</strong>
+                    <span style="font-size:9px; padding:2px 6px; border-radius:4px; font-weight:700; background:${isBanned ? 'rgba(229,9,20,0.2)' : 'rgba(76,175,80,0.2)'}; color:${isBanned ? '#e50914' : '#4caf50'}; border:1px solid ${isBanned ? 'rgba(229,9,20,0.3)' : 'rgba(76,175,80,0.3)'};">
+                      ${isBanned ? 'BANNED' : 'ACTIVE'}
+                    </span>
+                  </div>
+                  <p style="font-size:11px; color:#888; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${userEmail}</p>
+                </div>
+              </div>
+
+              <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+                <button class="toggle-ban-btn" data-id="${uId}" data-email="${userEmail}" data-banned="${isBanned}" style="padding:6px 14px; background:${isBanned ? '#2e7d32' : '#e50914'}; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:600; font-size:11px; display:inline-flex; align-items:center; gap:6px;">
+                  <i class="fas ${isBanned ? 'fa-user-check' : 'fa-ban'}"></i> ${isBanned ? 'Unban' : 'Ban'}
+                </button>
+                <button class="remove-user-btn" data-id="${uId}" data-email="${userEmail}" style="padding:6px 10px; background:#2a2a2a; color:#888; border:1px solid #333; border-radius:6px; cursor:pointer; font-size:11px;" title="Delete Record">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- VIP, BORDER, AT GLOW CONTROLS -->
+            <div class="user-controls-grid">
+              <div class="user-control-field">
+                <label>Rank / Tier:</label>
+                <select class="user-control-select" onchange="updateUserReward('${uId}', 'role', this.value)">
+                  <option value="free" ${currentRole === 'free' ? 'selected' : ''}>Free Member (Locked)</option>
+                  <option value="vip" ${currentRole === 'vip' ? 'selected' : ''}>⭐ VIP Supporter</option>
+                  <option value="top-donor" ${currentRole === 'top-donor' ? 'selected' : ''}>👑 TOP DONOR</option>
+                  <option value="legendary" ${currentRole === 'legendary' ? 'selected' : ''}>💎 LEGENDARY BACKER</option>
+                </select>
+              </div>
+
+              <div class="user-control-field">
+                <label>Set Border:</label>
+                <select class="user-control-select" onchange="updateUserReward('${uId}', 'avatarBorder', this.value)">
+                  <option value="none" ${currentBorder === 'none' ? 'selected' : ''}>None</option>
+                  <option value="emerald" ${currentBorder === 'emerald' ? 'selected' : ''}>⭐ Emerald Supporter</option>
+                  <option value="cyber" ${currentBorder === 'cyber' ? 'selected' : ''}>⚡ Cyber Blue</option>
+                  <option value="fire" ${currentBorder === 'fire' ? 'selected' : ''}>🔥 Fire Crimson</option>
+                  <option value="gold" ${currentBorder === 'gold' ? 'selected' : ''}>👑 Gold Crown</option>
+                  <option value="amethyst" ${currentBorder === 'amethyst' ? 'selected' : ''}>💎 Royal Amethyst</option>
+                  <option value="rainbow" ${currentBorder === 'rainbow' ? 'selected' : ''}>🌈 Cosmic RGB</option>
+                </select>
+              </div>
+
+              <div class="user-control-field">
+                <label>Set Name Glow:</label>
+                <select class="user-control-select" onchange="updateUserReward('${uId}', 'nameGlow', this.value)">
+                  <option value="none" ${currentGlow === 'none' ? 'selected' : ''}>None</option>
+                  <option value="emerald" ${currentGlow === 'emerald' ? 'selected' : ''}>💚 Emerald Glow</option>
+                  <option value="blue" ${currentGlow === 'blue' ? 'selected' : ''}>⚡ Cyan Plasma</option>
+                  <option value="red" ${currentGlow === 'red' ? 'selected' : ''}>🔥 Fire Crimson</option>
+                  <option value="gold" ${currentGlow === 'gold' ? 'selected' : ''}>✨ Shiny Gold</option>
+                  <option value="purple" ${currentGlow === 'purple' ? 'selected' : ''}>🔮 Mystic Purple</option>
+                  <option value="rgb" ${currentGlow === 'rgb' ? 'selected' : ''}>🌈 Rainbow Aurora</option>
+                </select>
+              </div>
+            </div>
+          `;
+          userList.appendChild(card);
+        });
+
+        // Toggle Ban / Unban
+        userList.querySelectorAll(".toggle-ban-btn").forEach(btn => {
+          btn.onclick = async () => {
+            const uId = btn.getAttribute("data-id");
+            const email = btn.getAttribute("data-email");
+            const isCurrentlyBanned = btn.getAttribute("data-banned") === "true";
+
+            btn.disabled = true;
+            btn.textContent = isCurrentlyBanned ? "Unbanning..." : "Banning...";
+
+            if (isCurrentlyBanned) {
+              await setDoc(doc(db, "users", uId), { isBanned: false }, { merge: true });
+            } else {
+              if (confirm(`Ban account for ${email}? Agad silang masisipa at hindi na makakapasok ulit.`)) {
+                await setDoc(doc(db, "users", uId), { isBanned: true }, { merge: true });
+              } else {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fas fa-ban"></i> Ban`;
+              }
+            }
+          };
+        });
+
+        // Delete Database Entry
+        userList.querySelectorAll(".remove-user-btn").forEach(btn => {
+          btn.onclick = async () => {
+            const uId = btn.getAttribute("data-id");
+            const email = btn.getAttribute("data-email");
+            if (confirm(`Delete database entry of ${email}?`)) {
+              btn.disabled = true;
+              await deleteDoc(doc(db, "users", uId));
+            }
+          };
+        });
+      });
+
+      // 4. Supporters & Donations
+      const donorList = document.getElementById("admin-donors-list");
+      onSnapshot(collection(db, "donations"), (snap) => {
+        document.getElementById("donor-count").textContent = snap.size;
+        donorList.innerHTML = snap.size === 0 ? `<p style="color:#777; text-align:center; padding:15px;">No supporters yet.</p>` : "";
+
+        const donors = [];
+        snap.forEach(d => donors.push({ id: d.id, ...d.data() }));
+        donors.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+        donors.forEach(dat => {
+          const card = document.createElement("div");
+          card.className = "feed-card";
+          card.innerHTML = `
+            <div style="display:flex; align-items:center; justify-content:space-between; width:100%;">
+              <div>
+                <strong>${dat.name}</strong> — <span style="color:#4caf50; font-weight:bold;">₱${dat.amount}</span>
+                <span style="font-size:11px; color:#888; margin-left:8px;">${dat.date || ''}</span>
+                <p style="font-size:12px; color:#aaa; margin-top:2px;">${dat.message || ''}</p>
+              </div>
+              <button class="del-btn" data-id="${dat.id}"><i class="fas fa-trash-alt"></i></button>
+            </div>
+          `;
+          donorList.appendChild(card);
+        });
+
+        donorList.querySelectorAll(".del-btn").forEach(b => b.onclick = () => {
+          if (confirm("Delete supporter entry?")) deleteDoc(doc(db, "donations", b.getAttribute("data-id")));
+        });
+      });
+
+      document.getElementById("add-donor-form").onsubmit = async (e) => {
+        e.preventDefault();
+        const dName = document.getElementById("donor-name").value;
+        const dAmt = Number(document.getElementById("donor-amount").value);
+        const dMsg = document.getElementById("donor-msg").value;
+        
+        const now = new Date();
+        const dateStr = now.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+
+        await addDoc(collection(db, "donations"), {
+          name: dName,
+          amount: dAmt,
+          message: dMsg,
+          date: dateStr,
+          timestamp: Date.now(),
+          createdAt: serverTimestamp()
+        });
+        document.getElementById("add-donor-form").reset();
+      };
+
+      // 5. System Updates
+      const logList = document.getElementById("admin-logs-list");
+      onSnapshot(collection(db, "changelogs"), (snap) => {
+        document.getElementById("log-count").textContent = snap.size;
+        logList.innerHTML = snap.size === 0 ? `<p style="color:#777; text-align:center; padding:15px;">No changelogs posted.</p>` : "";
+
+        const logs = [];
+        snap.forEach(d => logs.push({ id: d.id, ...d.data() }));
+        logs.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+        logs.forEach(l => {
+          const card = document.createElement("div");
+          card.className = "feed-card";
+          card.innerHTML = `
+            <div style="display:flex; align-items:flex-start; justify-content:space-between; width:100%;">
+              <div>
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                  <span style="background:#e50914; color:#fff; font-size:11px; font-weight:bold; padding:2px 6px; border-radius:4px;">${l.version}</span>
+                  <strong style="color:#fff; font-size:13px;">${l.title}</strong>
+                  <span style="font-size:11px; color:#888;">${l.date || ''}</span>
+                </div>
+                <div style="font-size:12px; color:#ccc; margin-top:5px; line-height:1.4;">
+                  ${Array.isArray(l.items) ? l.items.map(it => `• ${it}`).join('<br>') : (l.notes || '')}
+                </div>
+              </div>
+              <button class="del-btn" data-id="${l.id}"><i class="fas fa-trash-alt"></i></button>
+            </div>
+          `;
+          logList.appendChild(card);
+        });
+
+        logList.querySelectorAll(".del-btn").forEach(b => b.onclick = () => {
+          if (confirm("Delete changelog update?")) deleteDoc(doc(db, "changelogs", b.getAttribute("data-id")));
+        });
+      });
+
+      document.getElementById("add-log-form").onsubmit = async (e) => {
+        e.preventDefault();
+        const lVer = document.getElementById("log-ver").value;
+        const lTitle = document.getElementById("log-title").value;
+        const lNotes = document.getElementById("log-notes").value;
+        const itemsArr = lNotes.split("\n").map(s => s.trim().replace(/^•\s*/, "")).filter(Boolean);
+
+        const now = new Date();
+        const dateStr = now.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+
+        await addDoc(collection(db, "changelogs"), {
+          version: lVer,
+          title: lTitle,
+          notes: lNotes,
+          items: itemsArr,
+          date: dateStr,
+          timestamp: Date.now(),
+          createdAt: serverTimestamp()
+        });
+        document.getElementById("add-log-form").reset();
+      };
+    }
+  </script>
+</body>
+</html>
